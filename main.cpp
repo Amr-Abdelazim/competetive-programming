@@ -6,7 +6,7 @@
 #else
 #include "precompiled.h"
 #endif
-
+#define ll long long
 using namespace std;
 using namespace __gnu_pbds;
 template <typename T>

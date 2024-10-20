@@ -1,0 +1,145 @@
+
+class Bridges
+{
+    using vii = vector<pair<int, int>>;
+    using vvi = vector<vector<int>>;
+    using vi = vector<int>;
+    using pii = pair<int, int>;
+    bool hash_mode, number_of_components;
+    int timeDFS = 0, n;
+    vi disc, low;
+    vector<bool> visited;
+    vii bridges;
+    vvi adj;
+    set<int> nodes;
+    map<int, int> node_to_hash, hash_to_node;
+
+    Bridges(vii edges, int number_of_nodes = -1)
+    {
+        hash_mode = false;
+        number_of_components = 0;
+        if (number_of_nodes == -1)
+        {
+            hash_mode = true;
+            for (auto e : edges)
+            {
+                nodes.insert(e.first);
+                nodes.insert(e.second);
+            }
+            int c = 0;
+            for (auto node : nodes)
+            {
+                node_to_hash[node] = c;
+                hash_to_node[c] = node;
+                c++;
+            }
+            number_of_nodes = c;
+            for (auto &e : edges)
+            {
+                e.first = node_to_hash[e.first];
+                e.second = node_to_hash[e.second];
+            }
+        }
+        n = number_of_nodes;
+        adj = vvi(number_of_nodes);
+        for (auto e : edges)
+        {
+            int u = e.first, v = e.second;
+            adj[u].push_back(v);
+            adj[v].push_back(u);
+        }
+    }
+
+    void dfs(int u, int parent)
+    {
+        visited[u] = true;
+        disc[u] = low[u] = timeDFS++;
+
+        for (int v : adj[u])
+        {
+            if (v == parent)
+                continue;
+
+            if (!visited[v])
+            {
+                dfs(v, u);
+                low[u] = min(low[u], low[v]);
+                if (low[v] > disc[u])
+                {
+                    bridges.push_back({u, v});
+                }
+            }
+            else
+            {
+                low[u] = min(low[u], disc[v]);
+            }
+        }
+    }
+    vii original_edges()
+    {
+        if (!hash_mode)
+            return bridges;
+        vii ans;
+        for (auto b : bridges)
+        {
+            ans.push_back({hash_to_node[b.first],
+                           hash_to_node[b.second]});
+        }
+        return ans;
+    }
+    vii get_bridges()
+    {
+        if (bridges.size())
+            return original_edges();
+        for (int i = 0; i < n; i++)
+        {
+            if (!visited[i])
+            {
+                number_of_components++;
+                dfs(i, -1);
+            }
+        }
+        return original_edges();
+    }
+    void bld_tree_dfs(int u, vector<bool> &comp_num, set<pii> &bridges_set, vvi &components)
+    {
+        comp_num[u] = (int)components.size() - 1;
+        components.back().push_back(u);
+        for (auto i : adj[u])
+        {
+            if (comp_num[i] != -1 || bridges_set.count({u, i}))
+                continue;
+            bld_tree_dfs(i, comp_num, bridges_set, components);
+        }
+    }
+    pair<vvi, vvi> build_tree()
+    {
+        get_bridges(); // this will fill bridges vector
+        if (number_of_components != 1)
+            throw "The graph not connected!!";
+        vvi components;
+
+        vector<bool> comp_num(n, -1);
+        set<pii> bridges_set;
+        for (auto e : bridges)
+        {
+            bridges_set.insert(e);
+            bridges_set.insert({e.second, e.first});
+        }
+        for (int i = 0; i < n; i++)
+        {
+            if (comp_num[i] != -1)
+                continue;
+            components.emplace_back();
+            bld_tree_dfs(i, comp_num, bridges_set, components);
+        }
+        vvi tree(components.size());
+        for (auto e : bridges)
+        {
+            int u = comp_num[e.first], v = comp_num[e.second];
+            tree[u].push_back(v);
+            tree[v].push_back(u);
+        }
+        return {tree, components};
+    }
+};
