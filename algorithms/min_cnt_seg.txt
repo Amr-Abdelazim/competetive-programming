@@ -1,0 +1,65 @@
+class min_cnt_seg
+{
+public:
+    min_cnt_seg(int n)
+    {
+        reset(n);
+    }
+    void reset(int n)
+    {
+        this->n = n;
+        seg = vector<pair<int, int>>(4 * n, {inf, 0});
+    }
+    pair<int, int> get_min(int l, int r)
+    {
+        return get(l, r, 0, n - 1, 1);
+    }
+    void update(int dx, int val)
+    {
+        upd(dx, val, 1, 0, n - 1, 1);
+    }
+    void update(int dx, pair<int, int> val)
+    {
+        upd(dx, val.first, val.second, 0, n - 1, 1);
+    }
+
+private:
+    vector<pair<int, int>> seg;
+    int n;
+    void combine(pair<int, int> &dist, pair<int, int> a, pair<int, int> b)
+    {
+        dist = a;
+        if (dist.first > b.first)
+            dist = b;
+        else if (b.first == dist.first)
+            dist.second = (dist.second + b.second) % mod;
+    }
+    pair<int, int> get(int l, int r, int al, int ar, int p)
+    {
+        if (l > ar || r < al || al > ar)
+            return {inf, 0};
+        if (al >= l && ar <= r)
+        {
+            return seg[p];
+        }
+        int md = (al + ar) >> 1;
+        pair<int, int> ans = {inf, 0};
+        combine(ans, get(l, r, al, md, p << 1), get(l, r, md + 1, ar, p << 1 | 1));
+        return ans;
+    }
+
+    void upd(int dx, int val, int cnt, int al, int ar, int p)
+    {
+        if (dx > ar || dx < al || al > ar)
+            return;
+        if (al >= dx && ar <= dx)
+        {
+            seg[p] = {val, cnt};
+            return;
+        }
+        int md = (al + ar) >> 1;
+        upd(dx, val, cnt, al, md, p << 1);
+        upd(dx, val, cnt, md + 1, ar, p << 1 | 1);
+        combine(seg[p], seg[p << 1], seg[p << 1 | 1]);
+    }
+};
