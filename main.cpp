@@ -21,7 +21,8 @@ using pll = pair<ll, ll>;
 
 template <typename T>
 using ord_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-const int N = 5e5 + 5, M = 20;
+const int N = 5e5 + 5, M = 20, infint = 2e9;
+const ll infll = 2e18;
 
 int Solve()
 {
