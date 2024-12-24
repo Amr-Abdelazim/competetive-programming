@@ -95,5 +95,6 @@
     "typeinfo": "cpp",
     "valarray": "cpp",
     "variant": "cpp"
-  }
+  },
+  "cph.general.saveLocation": ""
 }
