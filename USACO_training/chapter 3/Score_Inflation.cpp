@@ -1,7 +1,7 @@
 /*
 ID: amr_abdelazim
 LANG: C++
-TASK: test
+TASK: inflate
 */
 #ifndef LOCAL
 #include <bits/stdc++.h>
@@ -24,19 +24,13 @@ using pii = pair<int, int>;
 using pll = pair<ll, ll>;
 #define all(v) v.begin(), v.end()
 #define rall(v) v.rbegin(), v.rend()
-#define rep(i, n) for (int i = 0; i < (n); i++)
+#define rep(i, n) for (int i = 0; i < n; i++)
 #define bit(mask, i) (((mask) >> (i)) & 1)
 
 template <typename T>
 using ord_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-const int N = 5e5 + 5, M = 20, infint = 2e9;
+const int N = 5e5 + 5, infint = 2e9;
 const ll infll = 2e18;
-
-int Solve()
-{
-
-    return 0;
-}
 
 signed main()
 {
@@ -44,15 +38,28 @@ signed main()
     cin.tie(nullptr);
     cout.tie(nullptr);
 
-    // freopen("test.in", "r", stdin);
-    // freopen("test.out", "w", stdout);
+    freopen("inflate.in", "r", stdin);
+    freopen("inflate.out", "w", stdout);
 
-    int t = 1;
-    cin >> t;
-    while (t--)
+    int m, n;
+    cin >> m >> n;
+    vector<int> P(n), M(n);
+    rep(i, n)
     {
-        Solve();
+        cin >> P[i] >> M[i];
     }
-
+    vector<int> dp(m + 1);
+    rep(i, n)
+    {
+        vector<int> cur(m + 1);
+        for (int j = 1; j <= m; j++)
+        {
+            cur[j] = dp[j];
+            if (j >= M[i])
+                cur[j] = max({cur[j - M[i]] + P[i], dp[j - M[i]] + P[i], cur[j]});
+        }
+        dp = cur;
+    }
+    cout << dp[m] << "\n";
     return 0;
 }

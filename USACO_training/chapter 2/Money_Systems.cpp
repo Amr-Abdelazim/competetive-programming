@@ -1,7 +1,7 @@
 /*
 ID: amr_abdelazim
 LANG: C++
-TASK: test
+TASK: money
 */
 #ifndef LOCAL
 #include <bits/stdc++.h>
@@ -24,7 +24,7 @@ using pii = pair<int, int>;
 using pll = pair<ll, ll>;
 #define all(v) v.begin(), v.end()
 #define rall(v) v.rbegin(), v.rend()
-#define rep(i, n) for (int i = 0; i < (n); i++)
+#define rep(i, n) for (int i = 0; i < n; i++)
 #define bit(mask, i) (((mask) >> (i)) & 1)
 
 template <typename T>
@@ -34,6 +34,21 @@ const ll infll = 2e18;
 
 int Solve()
 {
+    int n, m;
+    cin >> n >> m;
+    vector<int> a(n);
+    rep(i, n) cin >> a[i];
+    vector<ll> dp(m + 1);
+    dp[0] = 1;
+    for (int cur = 0; cur < n; cur++)
+    {
+        for (int sm = a[cur]; sm <= m; sm++)
+        {
+
+            dp[sm] += dp[sm - a[cur]];
+        }
+    }
+    cout << dp[m] << "\n";
 
     return 0;
 }
@@ -44,11 +59,11 @@ signed main()
     cin.tie(nullptr);
     cout.tie(nullptr);
 
-    // freopen("test.in", "r", stdin);
-    // freopen("test.out", "w", stdout);
+    freopen("money.in", "r", stdin);
+    freopen("money.out", "w", stdout);
 
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while (t--)
     {
         Solve();

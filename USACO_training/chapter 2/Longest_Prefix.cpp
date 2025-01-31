@@ -1,7 +1,7 @@
 /*
 ID: amr_abdelazim
 LANG: C++
-TASK: test
+TASK: prefix
 */
 #ifndef LOCAL
 #include <bits/stdc++.h>
@@ -24,7 +24,7 @@ using pii = pair<int, int>;
 using pll = pair<ll, ll>;
 #define all(v) v.begin(), v.end()
 #define rall(v) v.rbegin(), v.rend()
-#define rep(i, n) for (int i = 0; i < (n); i++)
+#define rep(i, n) for (int i = 0; i < n; i++)
 #define bit(mask, i) (((mask) >> (i)) & 1)
 
 template <typename T>
@@ -34,6 +34,30 @@ const ll infll = 2e18;
 
 int Solve()
 {
+    set<string> vs;
+    string in;
+    while (cin >> in)
+    {
+        if (in == ".")
+            break;
+        vs.insert(in);
+    }
+    string s;
+    while (cin >> in)
+    {
+        s += in;
+    }
+    vector<int> dp(s.size() + 1);
+    iota(all(dp), 0);
+    for (int i = s.size() - 1; i >= 0; i--)
+    {
+        for (int sz = 1; sz <= 10 && i + sz <= s.size(); sz++)
+        {
+            if (vs.count(s.substr(i, sz)))
+                dp[i] = max(dp[i], dp[i + sz]);
+        }
+    }
+    cout << dp[0] << "\n";
 
     return 0;
 }
@@ -44,11 +68,11 @@ signed main()
     cin.tie(nullptr);
     cout.tie(nullptr);
 
-    // freopen("test.in", "r", stdin);
-    // freopen("test.out", "w", stdout);
+    freopen("prefix.in", "r", stdin);
+    freopen("prefix.out", "w", stdout);
 
     int t = 1;
-    cin >> t;
+    // cin >> t;
     while (t--)
     {
         Solve();

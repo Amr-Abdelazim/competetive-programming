@@ -1,7 +1,7 @@
 /*
 ID: amr_abdelazim
 LANG: C++
-TASK: test
+TASK: fact4
 */
 #ifndef LOCAL
 #include <bits/stdc++.h>
@@ -32,27 +32,44 @@ using ord_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_n
 const int N = 5e5 + 5, M = 20, infint = 2e9;
 const ll infll = 2e18;
 
-int Solve()
-{
-
-    return 0;
-}
-
 signed main()
 {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
 
-    // freopen("test.in", "r", stdin);
-    // freopen("test.out", "w", stdout);
+    freopen("fact4.in", "r", stdin);
+    freopen("fact4.out", "w", stdout);
 
-    int t = 1;
-    cin >> t;
-    while (t--)
+    int n;
+    cin >> n;
+    int ans = 1;
+    vector<int> cnt(n + 1);
+    for (int i = 2; i <= n; i++)
     {
-        Solve();
+        int x = i;
+        for (int j = 2; j * j <= x; j++)
+        {
+            while (x % j == 0)
+            {
+                x /= j;
+                cnt[j]++;
+            }
+        }
+        if (x > 1)
+            cnt[x]++;
     }
+    int mn = min(cnt[2], cnt[5]);
+    cnt[2] -= mn;
+    cnt[5] -= mn;
+    rep(i, n + 1)
+    {
+        while (cnt[i]--)
+        {
+            ans = (ans * i) % 10;
+        }
+    }
+    cout << ans << "\n";
 
     return 0;
 }
