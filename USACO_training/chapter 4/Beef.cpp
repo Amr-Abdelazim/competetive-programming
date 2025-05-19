@@ -1,7 +1,7 @@
 /*
 ID: amr_abdelazim
 LANG: C++
-TASK: test
+TASK: nuggets
 */
 #ifndef LOCAL
 #include <bits/stdc++.h>
@@ -13,6 +13,7 @@ TASK: test
 #include "precompiled.h"
 #include "debug.h"
 #endif
+
 using namespace std;
 using namespace __gnu_pbds;
 using ll = long long;
@@ -28,38 +29,40 @@ using pll = pair<ll, ll>;
 
 template <typename T>
 using ord_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-const int N = 5e5 + 5, M = 20, infint = 2e9;
+const int N = 2e6 + 5, M = 20, infint = 2e9;
 const ll infll = 2e18;
-int a[101];
+int dp[N];
 signed main()
 {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
 
-    // freopen("test.in", "r", stdin);
-    // freopen("test.out", "w", stdout);
+    freopen("nuggets.in", "r", stdin);
+    freopen("nuggets.out", "w", stdout);
 
-    int t;
-    cin >> t;
-    while (t--)
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    rep(i, n) cin >> a[i];
+    sort(all(a));
+    dp[0] = 1;
+    int ans = 0;
+    rep(cur, N)
     {
-        int n;
-        cin >> n;
-        for (int i = 0; i < n; i++)
-            cin >> a[i];
-
-        for (int i = 0; i < n; i++)
+        rep(i, n)
         {
-            int mx = -2e9;
-            for (int j = i; j < n; j++)
+            if (a[i] <= cur)
             {
-                mx = max(mx, a[j]);
-                cout << mx << " ";
+                dp[cur] = max(dp[cur], dp[cur - a[i]]);
             }
-                }
-        cout << "\n";
+        }
+        if (!dp[cur])
+            ans = cur;
     }
+    if (ans > (int)1e6)
+        ans = 0;
+    cout << ans << "\n";
 
     return 0;
 }

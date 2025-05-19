@@ -1,7 +1,7 @@
 /*
 ID: amr_abdelazim
 LANG: C++
-TASK: test
+TASK: fence9
 */
 #ifndef LOCAL
 #include <bits/stdc++.h>
@@ -13,6 +13,7 @@ TASK: test
 #include "precompiled.h"
 #include "debug.h"
 #endif
+
 using namespace std;
 using namespace __gnu_pbds;
 using ll = long long;
@@ -30,36 +31,29 @@ template <typename T>
 using ord_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 const int N = 5e5 + 5, M = 20, infint = 2e9;
 const ll infll = 2e18;
-int a[101];
+int calc(int a, int b, int c, int d)
+{
+    return abs(__gcd(c - a, d - b));
+}
 signed main()
 {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
 
-    // freopen("test.in", "r", stdin);
-    // freopen("test.out", "w", stdout);
+    freopen("fence9.in", "r", stdin);
+    freopen("fence9.out", "w", stdout);
 
-    int t;
-    cin >> t;
-    while (t--)
-    {
-        int n;
-        cin >> n;
-        for (int i = 0; i < n; i++)
-            cin >> a[i];
+    int n, m, p;
+    cin >> n >> m >> p;
+    int A = (p * m);
+    int B = calc(0, 0, n, m);
+    B += calc(0, 0, p, 0);
+    B += calc(p, 0, n, m);
+    A -= B;
+    A += 2;
 
-        for (int i = 0; i < n; i++)
-        {
-            int mx = -2e9;
-            for (int j = i; j < n; j++)
-            {
-                mx = max(mx, a[j]);
-                cout << mx << " ";
-            }
-                }
-        cout << "\n";
-    }
+    cout << A / 2 << "\n";
 
     return 0;
 }

@@ -1,7 +1,7 @@
 /*
 ID: amr_abdelazim
 LANG: C++
-TASK: test
+TASK: game1
 */
 #ifndef LOCAL
 #include <bits/stdc++.h>
@@ -13,6 +13,7 @@ TASK: test
 #include "precompiled.h"
 #include "debug.h"
 #endif
+
 using namespace std;
 using namespace __gnu_pbds;
 using ll = long long;
@@ -28,38 +29,36 @@ using pll = pair<ll, ll>;
 
 template <typename T>
 using ord_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-const int N = 5e5 + 5, M = 20, infint = 2e9;
+const int N = 200 + 5, M = 20, infint = 2e9;
 const ll infll = 2e18;
-int a[101];
+int dp[N][N];
+int a[N];
+int fun(int l, int r)
+{
+    if (l > r)
+        return 0;
+    if (l == r)
+        return a[l];
+    int &ans = dp[l][r];
+    if (ans != -1)
+        return ans;
+    return ans = max(a[l] + min(fun(l + 2, r), fun(l + 1, r - 1)), a[r] + min(fun(l, r - 2), fun(l + 1, r - 1)));
+}
 signed main()
 {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
 
-    // freopen("test.in", "r", stdin);
-    // freopen("test.out", "w", stdout);
+    freopen("game1.in", "r", stdin);
+    freopen("game1.out", "w", stdout);
 
-    int t;
-    cin >> t;
-    while (t--)
-    {
-        int n;
-        cin >> n;
-        for (int i = 0; i < n; i++)
-            cin >> a[i];
-
-        for (int i = 0; i < n; i++)
-        {
-            int mx = -2e9;
-            for (int j = i; j < n; j++)
-            {
-                mx = max(mx, a[j]);
-                cout << mx << " ";
-            }
-                }
-        cout << "\n";
-    }
+    int n, sm = 0;
+    cin >> n;
+    rep(i, n) cin >> a[i], sm += a[i];
+    memset(dp, -1, sizeof(dp));
+    int first = fun(0, n - 1);
+    cout << first << " " << sm - first << "\n";
 
     return 0;
 }

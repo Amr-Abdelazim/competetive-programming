@@ -10,9 +10,10 @@ TASK: test
 #include <ext/pb_ds/tree_policy.hpp>
 #define debug(...) 8
 #else
-#include "precompiled.h"
-#include "debug.h"
+#include "../precompiled.h"
+#include "../debug.h"
 #endif
+
 using namespace std;
 using namespace __gnu_pbds;
 using ll = long long;
@@ -30,7 +31,7 @@ template <typename T>
 using ord_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 const int N = 5e5 + 5, M = 20, infint = 2e9;
 const ll infll = 2e18;
-int a[101];
+
 signed main()
 {
     ios::sync_with_stdio(false);
@@ -40,26 +41,16 @@ signed main()
     // freopen("test.in", "r", stdin);
     // freopen("test.out", "w", stdout);
 
-    int t;
-    cin >> t;
-    while (t--)
+    int n;
+    cin >> n;
+    int sm = 0;
+    rep(i, n)
     {
-        int n;
-        cin >> n;
-        for (int i = 0; i < n; i++)
-            cin >> a[i];
-
-        for (int i = 0; i < n; i++)
-        {
-            int mx = -2e9;
-            for (int j = i; j < n; j++)
-            {
-                mx = max(mx, a[j]);
-                cout << mx << " ";
-            }
-                }
-        cout << "\n";
+        int x;
+        cin >> x;
+        sm += x;
     }
+    cout << sm << "\n";
 
     return 0;
 }

@@ -1,7 +1,7 @@
 /*
 ID: amr_abdelazim
 LANG: C++
-TASK: test
+TASK: rockers
 */
 #ifndef LOCAL
 #include <bits/stdc++.h>
@@ -13,6 +13,7 @@ TASK: test
 #include "precompiled.h"
 #include "debug.h"
 #endif
+
 using namespace std;
 using namespace __gnu_pbds;
 using ll = long long;
@@ -28,38 +29,41 @@ using pll = pair<ll, ll>;
 
 template <typename T>
 using ord_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-const int N = 5e5 + 5, M = 20, infint = 2e9;
+const int N = 20 + 5, M = 20, infint = 2e9;
 const ll infll = 2e18;
-int a[101];
+int n, t, m;
+int dp[N][N][N];
+int a[N];
+int fun(int i, int rem, int cnt)
+{
+    if (i >= n)
+        return 0;
+    int &ans = dp[i][rem][cnt];
+    if (ans != -1)
+        return ans;
+    ans = fun(i + 1, rem, cnt);
+    if (rem >= a[i])
+        ans = max(fun(i + 1, rem - a[i], cnt) + 1, ans);
+    else if (cnt > 0)
+        ans = max(ans, fun(i, t, cnt - 1));
+    return ans;
+}
 signed main()
 {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cout.tie(nullptr);
 
-    // freopen("test.in", "r", stdin);
-    // freopen("test.out", "w", stdout);
+    freopen("rockers.in", "r", stdin);
+    freopen("rockers.out", "w", stdout);
 
-    int t;
-    cin >> t;
-    while (t--)
+    cin >> n >> t >> m;
+    rep(i, n)
     {
-        int n;
-        cin >> n;
-        for (int i = 0; i < n; i++)
-            cin >> a[i];
-
-        for (int i = 0; i < n; i++)
-        {
-            int mx = -2e9;
-            for (int j = i; j < n; j++)
-            {
-                mx = max(mx, a[j]);
-                cout << mx << " ";
-            }
-                }
-        cout << "\n";
+        cin >> a[i];
     }
+    memset(dp, -1, sizeof(dp));
+    cout << fun(0, t, m - 1) << "\n";
 
     return 0;
 }
